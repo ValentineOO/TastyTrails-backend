@@ -18,9 +18,8 @@ const getMyRestaurant = async (req: Request, res: Response) => {
 
 const createMyRestaurant = async (req: Request, res: Response) => {
   try {
-    const existingRestaurant = await Restaurant.findOne({
-      user: req.userId,
-    });
+    const existingRestaurant = await Restaurant.findOne({ user: req.userId });
+
     if (existingRestaurant) {
       return res
         .status(409)
