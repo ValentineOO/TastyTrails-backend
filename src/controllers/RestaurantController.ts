@@ -4,6 +4,7 @@ import Restaurant from "../models/restaurant";
 const searchRestaurant = async (req: Request, res: Response) => {
   try {
     const city = req.params.city;
+
     const searchQuery = (req.query.searchQuery as string) || "";
     const selectedCuisines = (req.query.selectedCuisines as string) || "";
     const sortOption = (req.query.sortOption as string) || "lastUpdated";
@@ -31,10 +32,11 @@ const searchRestaurant = async (req: Request, res: Response) => {
 
       query["cuisines"] = { $all: cuisinesArray };
     }
+
     if (searchQuery) {
       const searchRegex = new RegExp(searchQuery, "i");
       query["$or"] = [
-        { RestaurantName: searchRegex },
+        { restaurantName: searchRegex },
         { cuisines: { $in: [searchRegex] } },
       ];
     }
