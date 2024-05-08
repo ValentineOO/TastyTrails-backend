@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "concurrently \"nodemon\" \"yarn stripe\"",
+    "stripe": "stripe listen --forward-to localhost:7000/api/order/checkout/webhook",
     "build": "yarn && yarn tsc",
     "start": "node dist/index.js"
   },
@@ -11,13 +12,14 @@
   "dependencies": {
     "@types/multer": "^1.4.11",
     "cloudinary": "^2.2.0",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.5 ",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-oauth2-jwt-bearer": "^1.6.0",
-    "express-validator": "^7.0.1",
+    "express-oauth2-jwt- bearer": "^1.6.0",
+    "express-validator": "^7.0.1", 
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.5.0",
+    "mongodb": "^6.5.0", 
     "mongoose": "^8.2.4",
     "multer": "^1.4.5-lts.1",
     "stripe": "^15.5.0"
