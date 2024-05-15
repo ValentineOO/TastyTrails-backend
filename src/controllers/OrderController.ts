@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
 import Stripe from "stripe";
+import { Request, Response } from "express";
 import Restaurant, { MenuItemType } from "../models/restaurant";
 import Order from "../models/order";
 

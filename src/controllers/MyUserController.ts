@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/user";
+
 const getCurrentUser = async (req: Request, res: Response) => {
   try {
     const currentUser = await User.findOne({ _id: req.userId });
