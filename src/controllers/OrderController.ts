@@ -22,7 +22,7 @@ type CheckoutSessionRequest = {
   restaurantId: string;
 };
 
-const stripeWebhookHandler = async (req: Request, res: Response) => {
+const stripeWebhookHandler = async (req: Request, res: Response) => { console.log("Raw request body:", req.body);
   let event;
   try {
     const sig = req.headers["stripe-signature"];

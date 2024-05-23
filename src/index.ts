@@ -7,6 +7,8 @@ import { v2 as cloudinary } from "cloudinary";
 import myRestaurantRoute from "./routes/MyRestaurantRoute";
 import restaurantRoute from "./routes/RestaurantRoute";
 import orderRoute from "./routes/OrderRoute";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 mongoose
   .connect(process.env.MONGODB_URL as string)
@@ -19,11 +21,36 @@ cloudinary.config({
 });
 
 const app = express();
-app.use(cors());
+
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  throw new Error("SESSION_SECRET environment variable is not set.");
+}
+
+// Ensure CORS configuration allows credentials
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
 
 app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
 
 app.use(express.json());
+
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }), // Using connect-mongo for session storage
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
+      sameSite: "none", // Allow cookies to be sent in all contexts, including cross-origin
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
 
 app.get("/health", async (req: Request, res: Response) => {
   res.send({ message: "health is fine" });
