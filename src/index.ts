@@ -27,11 +27,12 @@ if (!sessionSecret) {
   throw new Error("SESSION_SECRET environment variable is not set.");
 }
 
-// Ensure CORS configuration allows credentials
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
 
@@ -42,12 +43,12 @@ app.use(
     secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }), // Using connect-mongo for session storage
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS in production
-      sameSite: "none", // Allow cookies to be sent in all contexts, including cross-origin
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
